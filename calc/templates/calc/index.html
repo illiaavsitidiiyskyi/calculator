@@ -1,0 +1,57 @@
+<!-- calc/templates/calc/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-4">Calculator</h4>
+
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                {% if result %}
+                    <div class="alert alert-success">
+                        <strong>{{ expression }} = {{ result }}</strong>
+                    </div>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('calc.calculate') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Expression</label>
+                        <input type="text"
+                               name="expression"
+                               class="form-control form-control-lg"
+                               placeholder="e.g. 2 + 2 * 10"
+                               value="{{ expression or '' }}"
+                               required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">=</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-3">History</h4>
+                {% if history %}
+                    <ul class="list-group list-group-flush">
+                        {% for calc in history %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>{{ calc.expression }}</span>
+                                <strong>= {{ calc.result }}</strong>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No calculations yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
